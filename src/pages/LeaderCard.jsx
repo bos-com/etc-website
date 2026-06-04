@@ -136,7 +136,7 @@ export default function LeaderCard() {
         <div className="mt-8 flex justify-center">
           <div className="bg-white p-4 border rounded-lg">
             <QRCodeCanvas
-              value={`http://localhost:5173/verify/${leader.id}`}
+              value={`https://etc-website-tnkp.vercel.app/verify/${leader.id}`}
               size={120}
             />
           </div>
