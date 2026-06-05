@@ -39,9 +39,16 @@ export default function VerifyLeader() {
 
       <div className="bg-white shadow-xl rounded-xl p-10 max-w-lg w-full">
 
-        <h1 className="text-3xl font-bold text-center text-green-700 mb-6">
+        <h1 className="text-4xl font-bold text-green-700">
           ✓ Registration Verified
         </h1>
+        <h1 className="text-4xl font-bold text-red-700">
+          ✗ Registration Rejected
+        </h1>
+        <h1 className="text-4xl font-bold text-yellow-600">
+          ⏳ Awaiting Approval
+        </h1>
+
 
         <img
           src={leader.photo_url}

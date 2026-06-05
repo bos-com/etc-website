@@ -55,11 +55,33 @@ export default function LeaderCard() {
 
         <div className="flex gap-8 items-center">
 
-          <img
-            src={leader.photo_url}
-            alt="Leader"
-            className="w-40 h-40 rounded-lg object-cover border"
-          />
+          <div className="flex flex-col items-center">
+
+            <img
+              src={leader.photo_url}
+              alt="Leader"
+              className="w-40 h-40 rounded-lg object-cover border"
+            />
+
+            <div className="flex gap-2 mt-3 justify-center">
+              {leader.registration_type.includes("MG") && (
+                <img
+                  src={mgBadge}
+                  alt="MG Badge"
+                  className="w-16 h-16"
+                />
+              )}
+
+              {leader.registration_type.includes("SYL") && (
+                <img
+                  src={sylBadge}
+                  alt="SYL Badge"
+                  className="w-16 h-16"
+                />
+              )}
+            </div>
+
+          </div>
 
           <div className="space-y-3">
             <h2 className="text-2xl font-bold">
@@ -87,17 +109,22 @@ export default function LeaderCard() {
             </p>
 
             <p>
-              <strong>Status:</strong>{" "}
-              <div className="mt-4 flex gap-4 items-center">
+             <div>
+               <strong>Status:</strong>{" "}
+               <span
+                 className={`font-bold ${
+                   leader.approval_status === "Approved"
+                     ? "text-green-600"
+                     : leader.approval_status === "Rejected"
+                     ? "text-red-600"
+                     : "text-yellow-600"
+                 }`}
+               >
+                 {leader.approval_status}
+               </span>
+             </div>
                 {(leader.registration_type === "MG" ||
                   leader.registration_type === "BOTH") && (
-                  <img
-                    src={mgBadge}
-                    alt="Master Guide"
-                    className="w-16 h-16 object-contain"
-                  />
-                )}
-
                 {(leader.registration_type === "SYL" ||
                   leader.registration_type === "BOTH") && (
                   <img
