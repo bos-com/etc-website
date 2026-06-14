@@ -185,6 +185,17 @@ if (letterFile) {
     .getPublicUrl(letterName).data.publicUrl;
 }
 
+const { data: existingLeader } = await supabase
+  .from("leaders")
+  .select("id")
+  .eq("phone", formData.phone)
+  .maybeSingle();
+
+if (existingLeader) {
+  alert("This phone number is already registered.");
+  setLoading(false);
+  return;
+}
     const { error } = await supabase.from("leaders").insert([
 
        {
@@ -231,6 +242,10 @@ if (letterFile) {
     });
 
     setLoading(false);
+
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 5000);
   };
 
   return (
@@ -252,9 +267,14 @@ if (letterFile) {
 
           {registrationNumber && (
             <div className="bg-green-100 border border-green-500 rounded-3xl p-8 mb-8 text-center">
+
               <h2 className="text-2xl font-bold text-green-800">
                 Registration Successful
               </h2>
+
+              <p className="mt-3 text-green-700 font-semibold">
+                Status: Pending Approval
+              </p>
 
               <p className="mt-3 text-gray-700">
                 Registration Number
@@ -263,6 +283,15 @@ if (letterFile) {
               <p className="text-3xl font-bold text-cyan-700 mt-2">
                 {registrationNumber}
               </p>
+
+              <p className="mt-4 text-gray-600">
+                Please wait for approval from the Conference Youth Department.
+              </p>
+
+              <p className="mt-2 text-sm text-gray-500">
+                You will be redirected to the homepage in 5 seconds...
+              </p>
+
             </div>
           )}
 
@@ -404,8 +433,15 @@ if (letterFile) {
                 className="w-full border rounded-xl p-4"
                 required
               />
-            </div>
 
+              {photoFile && (
+                <img
+                  src={URL.createObjectURL(photoFile)}
+                  alt="Preview"
+                  className="w-32 h-32 rounded-lg object-cover mt-4 border"
+                />
+              )}
+            </div>
             <div>
               <label className="block font-semibold mb-2">
                 Recommendation Letter (PDF)

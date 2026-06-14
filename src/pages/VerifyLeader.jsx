@@ -9,7 +9,7 @@ export default function VerifyLeader() {
 
   useEffect(() => {
     fetchLeader();
-  }, []);
+  }, [id]);
 
   const fetchLeader = async () => {
     const { data, error } = await supabase
@@ -35,31 +35,81 @@ export default function VerifyLeader() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center">
+    <div className="min-h-screen bg-gray-100 flex justify-center items-center p-6">
+      <div className="bg-white shadow-xl rounded-xl p-10 max-w-xl w-full">
 
-      <div className="bg-white shadow-xl rounded-xl p-10 max-w-lg w-full">
+        {/* Verification Status */}
+        <div className="text-center mb-6">
 
-        <h1 className="text-4xl font-bold text-green-700">
-          ✓ Registration Verified
-        </h1>
-        <h1 className="text-4xl font-bold text-red-700">
-          ✗ Registration Rejected
-        </h1>
-        <h1 className="text-4xl font-bold text-yellow-600">
-          ⏳ Awaiting Approval
-        </h1>
+          {leader.approval_status === "Approved" && (
+            <h1 className="text-4xl font-bold text-green-700">
+              ✓ Registration Verified
+            </h1>
+          )}
+
+          {leader.approval_status === "Rejected" && (
+            <h1 className="text-4xl font-bold text-red-700">
+              ✗ Registration Rejected
+            </h1>
+          )}
+      {leader.approval_status === "Rejected" &&
+        leader.rejection_reason && (
+          <div className="mt-4 bg-red-50 border border-red-300 rounded-lg p-4">
+            <h3 className="font-bold text-red-700 mb-2">
+              Reason for Rejection
+            </h3>
+
+            <p className="text-gray-700">
+              {leader.rejection_reason}
+            </p>
+          </div>
+      )}
+  {leader.approval_status === "Rejected" && (
+    <div className="mt-4 text-center">
+      <button
+        onClick={() =>
+          window.location.href =
+            `/edit-registration/${leader.id}`
+        }
+        className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold"
+      >
+        Edit Registration
+      </button>
+    </div>
+  )}
 
 
-        <img
-          src={leader.photo_url}
-          alt="Leader"
-          className="w-32 h-32 rounded-full mx-auto object-cover border"
-        />
+          {leader.approval_status === "Pending" && (
+            <h1 className="text-4xl font-bold text-yellow-600">
+              ⏳ Awaiting Approval
+            </h1>
+          )}
 
-        <div className="mt-6 space-y-3">
+          <h2 className="text-xl font-bold text-cyan-700 mt-4">
+            East Tanzania Conference
+          </h2>
+
+          <p className="text-gray-600">
+            MG / SYL Registration Verification
+          </p>
+
+        </div>
+
+        {/* Leader Photo */}
+        <div className="flex justify-center mb-6">
+          <img
+            src={leader.photo_url}
+            alt="Leader"
+            className="w-32 h-32 rounded-full object-cover border"
+          />
+        </div>
+
+        {/* Leader Details */}
+        <div className="space-y-3">
 
           <p>
-            <strong>Name:</strong> {leader.full_name}
+            <strong>Name:</strong>{" "}
+            {leader.full_name}
           </p>
 
           <p>
@@ -68,7 +118,7 @@ export default function VerifyLeader() {
           </p>
 
           <p>
-            <strong>Type:</strong>{" "}
+            <strong>Registration Type:</strong>{" "}
             {leader.registration_type}
           </p>
 
@@ -78,6 +128,16 @@ export default function VerifyLeader() {
           </p>
 
           <p>
+            <strong>District Pastor:</strong>{" "}
+            {leader.district_pastor}
+          </p>
+
+          <p>
+            <strong>Registered:</strong>{" "}
+            {new Date(leader.created_at).toLocaleDateString()}
+          </p>
+
+          <div>
             <strong>Status:</strong>{" "}
             <span
               className={`font-bold ${
@@ -90,12 +150,34 @@ export default function VerifyLeader() {
             >
               {leader.approval_status}
             </span>
-          </p>
+          </div>
+
+        </div>
+
+        {/* Verification Badge */}
+        <div className="mt-8 text-center">
+
+          {leader.approval_status === "Approved" && (
+            <div className="bg-green-100 text-green-800 px-6 py-3 rounded-xl font-bold">
+              VERIFIED REGISTRATION
+            </div>
+          )}
+
+          {leader.approval_status === "Rejected" && (
+            <div className="bg-red-100 text-red-800 px-6 py-3 rounded-xl font-bold">
+              REGISTRATION REJECTED
+            </div>
+          )}
+
+          {leader.approval_status === "Pending" && (
+            <div className="bg-yellow-100 text-yellow-800 px-6 py-3 rounded-xl font-bold">
+              AWAITING APPROVAL
+            </div>
+          )}
 
         </div>
 
       </div>
-
     </div>
   );
 }

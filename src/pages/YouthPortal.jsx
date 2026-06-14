@@ -49,7 +49,7 @@ export default function YouthPortal() {
 
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
 
               {/* MG CARD */}
               <div className="bg-white rounded-3xl shadow-xl p-10 hover:-translate-y-2 hover:shadow-2xl transition duration-300 border border-transparent hover:border-cyan-500">
@@ -122,6 +122,31 @@ export default function YouthPortal() {
 
                   <button className="w-full bg-cyan-700 hover:bg-blue-900 text-white py-4 rounded-2xl font-bold transition">
                     Register Both
+                  </button>
+
+                </Link>
+
+              </div>
+              {/* CHECK STATUS CARD */}
+              <div className="bg-white rounded-3xl shadow-xl p-10 hover:-translate-y-2 hover:shadow-2xl transition duration-300 border border-transparent hover:border-green-500">
+
+                <div className="text-6xl mb-6">
+                  🔍
+                </div>
+
+                <h3 className="text-3xl font-bold text-green-700 mb-6">
+                  Check Status
+                </h3>
+
+                <p className="text-gray-600 leading-relaxed mb-8">
+                  Track registration approval, view rejection reasons,
+                  and access your leadership card.
+                </p>
+
+                <Link to="/check-status">
+
+                  <button className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-bold transition">
+                    Check Status
                   </button>
 
                 </Link>

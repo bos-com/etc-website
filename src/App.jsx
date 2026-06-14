@@ -11,7 +11,8 @@ import Districts from "./pages/Districts";
 import Communication from "./pages/Communication";
 import Youth from "./pages/Youth";
 import YouthPortal from "./pages/YouthPortal";
-
+import EditRegistration from "./pages/EditRegistration";
+import CheckStatus from "./pages/CheckStatus";
 export default function App() {
 
   return (
@@ -57,6 +58,14 @@ export default function App() {
         <Route
           path="/verify/:id"
           element={<VerifyLeader />}
+        />
+        <Route
+          path="/edit-registration/:id"
+          element={<EditRegistration />}
+        />
+        <Route
+          path="/check-status"
+          element={<CheckStatus />}
         />
 
       </Routes>
