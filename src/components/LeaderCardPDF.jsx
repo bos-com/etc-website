@@ -11,6 +11,7 @@ import etcLogo from "../assets/images/etc-logo 1.png";
 import mgBadge from "../assets/images/mg-badge.png";
 import sylBadge from "../assets/images/syl-badge.png";
 import signature from "../assets/images/signature.png";
+import JsBarcode from "jsbarcode";
 
 const styles = StyleSheet.create({
   page: {
@@ -131,6 +132,16 @@ qrCode: {
   height: 22,
   marginTop: 2,
 },
+barcode: {
+  width: 90,
+  height: 22,
+  marginTop: 8,
+},
+qrCode: {
+  width: 18,
+  height: 18,
+  marginTop: 1,
+},
 });
 
 export default function LeaderCardPDF({
@@ -138,6 +149,7 @@ export default function LeaderCardPDF({
   startYear,
   endYear,
   qrCodeUrl,
+  barcodeUrl,
 }) {
   return (
     <Document>
@@ -313,6 +325,20 @@ export default function LeaderCardPDF({
             <Text style={styles.backText}>
               Validity: {startYear} - {endYear}
             </Text>
+            <Text
+              style={{
+                fontSize: 4,
+                marginTop: 4,
+                color: "#777777",
+                textAlign: "center",
+              }}
+            >
+              Property of East Tanzania Conference
+            </Text>
+           <Image
+             src={barcodeUrl}
+             style={styles.barcode}
+           />
 
           </View>
 

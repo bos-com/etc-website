@@ -44,14 +44,30 @@ const downloadPDF = async () => {
   const qrCodeUrl = await QRCode.toDataURL(
     `https://etc-website-tnkp.vercel.app/verify/${leader.id}`
   );
+const canvas = document.createElement("canvas");
+
+JsBarcode(
+  canvas,
+  `ETC-CARD-${leader.id}`,
+  {
+    format: "CODE128",
+    displayValue: true,
+    fontSize: 10,
+    height: 35,
+    width: 1.2,
+  }
+);
+
+const barcodeUrl = canvas.toDataURL("image/png");
 
   const blob = await pdf(
-    <LeaderCardPDF
-      leader={leader}
-      startYear={startYear}
-      endYear={endYear}
-      qrCodeUrl={qrCodeUrl}
-    />
+   <LeaderCardPDF
+     leader={leader}
+     startYear={startYear}
+     endYear={endYear}
+     qrCodeUrl={qrCodeUrl}
+     barcodeUrl={barcodeUrl}
+   />
   ).toBlob();
 
   const url = URL.createObjectURL(blob);
