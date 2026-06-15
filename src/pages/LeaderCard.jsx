@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabase";
 import { QRCodeCanvas } from "qrcode.react";
 import QRCode from "qrcode";
 import Barcode from "react-barcode";
+import JsBarcode from "jsbarcode";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import etcLogo from "../assets/images/etc-logo 1.png";
@@ -21,9 +22,20 @@ const startYear = leader
 const endYear = leader
   ? startYear + 4
   : "";
-  useEffect(() => {
+
+const currentYear = new Date().getFullYear();
+
+const cardStatus =
+  currentYear > endYear
+    ? "Expired"
+    : currentYear === endYear
+    ? "Expiring Soon"
+    : "Active";
+
+      useEffect(() => {
     fetchLeader();
   }, [id]);
+
 
   const fetchLeader = async () => {
     const { data, error } = await supabase
@@ -285,6 +297,20 @@ if (leader.approval_status !== "Approved") {
                 }`}
               >
                 {leader.approval_status}
+              </span>
+            </p>
+            <p>
+              <strong>Card Status:</strong>{" "}
+              <span
+                className={
+                  cardStatus === "Expired"
+                    ? "text-red-600 font-bold"
+                    : cardStatus === "Expiring Soon"
+                    ? "text-yellow-600 font-bold"
+                    : "text-green-600 font-bold"
+                }
+              >
+                {cardStatus}
               </span>
             </p>
 

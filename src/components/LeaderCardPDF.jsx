@@ -248,6 +248,15 @@ export default function LeaderCardPDF({
                 <Text style={styles.text}>
                   Status: {leader.approval_status}
                 </Text>
+                <Text style={styles.text}>
+                  Card Status: {
+                    new Date().getFullYear() > endYear
+                      ? "Expired"
+                      : new Date().getFullYear() === endYear
+                      ? "Expiring Soon"
+                      : "Active"
+                  }
+                </Text>
 
               </View>
 
