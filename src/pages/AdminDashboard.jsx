@@ -220,9 +220,8 @@ const rejectLeader = async (id) => {
                 ).length
               }
             </p>
+            </div>
           </div>
-
-        </div>
 
         {/* Search & Filter */}
         <div className="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
@@ -261,6 +260,7 @@ const rejectLeader = async (id) => {
                 <th className="p-4">Photo</th>
                 <th className="p-4">Letter</th>
                 <th className="p-4">Status</th>
+                <th className="p-4">Card Status</th>
                 <th className="p-4">Actions</th>
               </tr>
             </thead>
@@ -344,6 +344,38 @@ const rejectLeader = async (id) => {
                       >
                         {leader.approval_status}
                       </span>
+                    </td>
+                    <td className="p-4">
+                      {(() => {
+                        const startYear =
+                          new Date(leader.created_at).getFullYear();
+
+                        const endYear = startYear + 4;
+
+                        const currentYear =
+                          new Date().getFullYear();
+
+                        const cardStatus =
+                          currentYear > endYear
+                            ? "Expired"
+                            : currentYear === endYear
+                            ? "Expiring Soon"
+                            : "Active";
+
+                        return (
+                          <span
+                            className={`px-3 py-1 rounded-full text-white text-sm ${
+                              cardStatus === "Expired"
+                                ? "bg-red-600"
+                                : cardStatus === "Expiring Soon"
+                                ? "bg-yellow-500"
+                                : "bg-green-600"
+                            }`}
+                          >
+                            {cardStatus}
+                          </span>
+                        );
+                      })()}
                     </td>
                    <td className="p-4">
                      <div className="flex gap-2">
