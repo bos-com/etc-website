@@ -3,12 +3,112 @@ import { supabase } from "../lib/supabase";
 import Navbar from "../components/Navbar";
 import { Navigate } from "react-router-dom";
 import * as XLSX from "xlsx";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 
 export default function AdminDashboard() {
   const [leaders, setLeaders] = useState([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+const registrationData = [
+  {
+    name: "MG",
+    count: leaders.filter(
+      (leader) => leader.registration_type === "MG"
+    ).length,
+  },
+  {
+    name: "SYL",
+    count: leaders.filter(
+      (leader) => leader.registration_type === "SYL"
+    ).length,
+  },
+  {
+    name: "BOTH",
+    count: leaders.filter(
+      (leader) => leader.registration_type === "BOTH"
+    ).length,
+  },
+];
+const approvalData = [
+  {
+    name: "Approved",
+    value: leaders.filter(
+      (leader) => leader.approval_status === "Approved"
+    ).length,
+  },
+  {
+    name: "Pending",
+    value: leaders.filter(
+      (leader) => leader.approval_status === "Pending"
+    ).length,
+  },
+  {
+    name: "Rejected",
+    value: leaders.filter(
+      (leader) => leader.approval_status === "Rejected"
+    ).length,
+  },
+];
+const cardStatusData = [
+  {
+    name: "Active",
+    value: leaders.filter((leader) => {
+      const startYear =
+        new Date(
+          leader.renewed_at || leader.created_at
+        ).getFullYear();
 
+      const endYear = startYear + 4;
+
+      return (
+        new Date().getFullYear() < endYear
+      );
+    }).length,
+  },
+
+  {
+    name: "Expiring Soon",
+    value: leaders.filter((leader) => {
+      const startYear =
+        new Date(
+          leader.renewed_at || leader.created_at
+        ).getFullYear();
+
+      const endYear = startYear + 4;
+
+      return (
+        new Date().getFullYear() === endYear
+      );
+    }).length,
+  },
+
+  {
+    name: "Expired",
+    value: leaders.filter((leader) => {
+      const startYear =
+        new Date(
+          leader.renewed_at || leader.created_at
+        ).getFullYear();
+
+      const endYear = startYear + 4;
+
+      return (
+        new Date().getFullYear() > endYear
+      );
+    }).length,
+  },
+];
   if (localStorage.getItem("etc_admin") !== "true") {
     return <Navigate to="/admin-login" />;
   }
@@ -222,6 +322,79 @@ const rejectLeader = async (id) => {
             </p>
             </div>
           </div>
+          {/* Registration Chart */}
+          <div className="bg-white rounded-xl shadow p-6 mb-8">
+
+            <h2 className="text-xl font-bold mb-4">
+              Registration Types Overview
+            </h2>
+
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={registrationData}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                 <Legend />
+                <Bar
+                  dataKey="count"
+                  fill="#0e7490"
+                />
+              </BarChart>
+            </ResponsiveContainer>
+
+          </div>
+          <div className="bg-white rounded-xl shadow p-6 mb-8">
+
+            <h2 className="text-xl font-bold mb-4">
+              Approval Status Overview
+            </h2>
+
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={approvalData}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={100}
+                  label
+                >
+                  <Cell fill="#16a34a" />
+                  <Cell fill="#eab308" />
+                  <Cell fill="#dc2626" />
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+
+          </div>
+          <div className="bg-white rounded-xl shadow p-6 mb-8">
+
+            <h2 className="text-xl font-bold mb-4">
+              Card Status Overview
+            </h2>
+
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+
+                <Pie
+                  data={cardStatusData}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={100}
+                  label
+                >
+                  <Cell fill="#16a34a" />
+                  <Cell fill="#eab308" />
+                  <Cell fill="#dc2626" />
+                </Pie>
+
+                <Tooltip />
+
+              </PieChart>
+            </ResponsiveContainer>
+
+          </div>
 
         {/* Search & Filter */}
         <div className="bg-white rounded-xl shadow-lg p-6 overflow-x-auto">
@@ -348,7 +521,9 @@ const rejectLeader = async (id) => {
                     <td className="p-4">
                       {(() => {
                         const startYear =
-                          new Date(leader.created_at).getFullYear();
+                          new Date(
+                            leader.renewed_at || leader.created_at
+                          ).getFullYear();
 
                         const endYear = startYear + 4;
 
