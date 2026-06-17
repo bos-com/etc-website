@@ -197,6 +197,31 @@ const rejectLeader = async (id) => {
 
   fetchLeaders();
 };
+const renewCard = async (leader) => {
+  const confirmed = window.confirm(
+    `Renew card for ${leader.full_name}?`
+  );
+
+  if (!confirmed) return;
+
+  const { error } = await supabase
+    .from("leaders")
+    .update({
+      renewed_at: new Date().toISOString(),
+      renewal_count:
+        (leader.renewal_count || 0) + 1,
+    })
+    .eq("id", leader.id);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  alert("Card renewed successfully");
+
+  fetchLeaders();
+};
   return (
     <>
       <Navbar />
@@ -364,6 +389,7 @@ const rejectLeader = async (id) => {
                 </Pie>
                 <Tooltip />
                 <Legend />
+
               </PieChart>
             </ResponsiveContainer>
 
@@ -390,6 +416,7 @@ const rejectLeader = async (id) => {
                 </Pie>
 
                 <Tooltip />
+                <Legend />
 
               </PieChart>
             </ResponsiveContainer>
@@ -434,6 +461,7 @@ const rejectLeader = async (id) => {
                 <th className="p-4">Letter</th>
                 <th className="p-4">Status</th>
                 <th className="p-4">Card Status</th>
+                <th className="p-4">Renewals</th>
                 <th className="p-4">Actions</th>
               </tr>
             </thead>
@@ -520,10 +548,9 @@ const rejectLeader = async (id) => {
                     </td>
                     <td className="p-4">
                       {(() => {
-                        const startYear =
-                          new Date(
-                            leader.renewed_at || leader.created_at
-                          ).getFullYear();
+                        const startYear = new Date(
+                          leader.renewed_at || leader.created_at
+                        ).getFullYear();
 
                         const endYear = startYear + 4;
 
@@ -552,9 +579,13 @@ const rejectLeader = async (id) => {
                         );
                       })()}
                     </td>
-                   <td className="p-4">
-                     <div className="flex gap-2">
 
+                    <td className="p-4">
+                      {leader.renewal_count ?? 0}
+                    </td>
+
+                    <td className="p-4">
+                      <div className="flex gap-2">
                        <button
                          onClick={() => {
                            if (
@@ -584,6 +615,29 @@ const rejectLeader = async (id) => {
                        >
                          Reject
                        </button>
+                       {(() => {
+                         const startYear =
+                           new Date(
+                             leader.renewed_at || leader.created_at
+                           ).getFullYear();
+
+                         const endYear = startYear + 4;
+
+                         const currentYear =
+                           new Date().getFullYear();
+
+                         const canRenew =
+                           currentYear >= endYear;
+
+                         return canRenew ? (
+                           <button
+                             onClick={() => renewCard(leader)}
+                             className="bg-yellow-500 text-white px-3 py-1 rounded"
+                           >
+                             Renew
+                           </button>
+                         ) : null;
+                       })()}
 
                        <button
                          onClick={() =>

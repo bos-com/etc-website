@@ -16,13 +16,14 @@ export default function LeaderCard() {
   const { id } = useParams();
   const [leader, setLeader] = useState(null);
 const startYear = leader
-  ? new Date(leader.created_at).getFullYear()
+  ? new Date(
+      leader.renewed_at || leader.created_at
+    ).getFullYear()
   : "";
 
 const endYear = leader
   ? startYear + 4
   : "";
-
 const currentYear = new Date().getFullYear();
 
 const cardStatus =
